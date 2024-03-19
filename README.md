@@ -45,9 +45,9 @@ Les informations des beatmaps que nous utiliserons pour créer des playlists con
 
 ## User
 
-| id_user | email                              | pseudo | password | playlists |
-| ------- | ---------------------------------- | ------ | -------- | --------- |
-| 0       | alex.xu@etu.sorobnne-universite.fr | Alex   | "4Fd8Gh" | [0, 1 ]   |
+| id_user | email                              | pseudo | password | playlists | friends |
+| ------- | ---------------------------------- | ------ | -------- | --------- | ------- |
+| 0       | alex.xu@etu.sorobnne-universite.fr | Alex   | "4Fd8Gh" | [0, 1 ]   | [0,1,2] |
 
 ## Playlist
 
