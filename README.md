@@ -36,6 +36,10 @@ Les informations des beatmaps que nous utiliserons pour créer des playlists con
 - L'utilisateur se connecte, il attérit sur la page d'accueil dans laquelle il peut générer une playlist en spécifiant ses préférences, en cochant les filtres proposés ou bien en ajoutant des tags.
 - Le site pioche ensuite x beatmaps correspondant aux préférences de l'utilisateur, et propose la playlist à l'utilisateur. 
 - L'utilisateur peut ensuite l'enregistrer (pour les télécharger en jeu), la partager.
+- Après la génération d'une playlist, l'utilisateur peut refuser la playlist et demander d'en générer une autre et peut sélectionner les maps à garder lors de la nouvelle génération.
+- Après la génération d'une playlist, l'utilisateur peut manuellement retirer des beatmaps et/ou en ajouter d'autres.
+- L'utilisateur après s'être connecté peut observer toutes ses playlists.
+- (L'utilisateur peut réorganiser l'ordre des musiques dans sa playlist selon ses préférences.)
 
 # Données 
 
@@ -47,9 +51,93 @@ Les informations des beatmaps que nous utiliserons pour créer des playlists con
 
 ## Playlist
 
-| id_playlist | length | mode     | genres      | languages                | tags              | difficulty | 
-| ----------- | ------ | -------- | ----------- | ------------------------ | ----------------- | ------------ |
-| 0           | 50     | all      | [Jeu vidéo] | [Instumental]            | [pokemon, ..]     | 1.02 - 3.13  |
-| 1           | 20     | fruits   | [Anime]     | [Japanese, Instrumental] | [dragon ball, ..] | 2.11 - 4.51  |
-| 2           | 10     | mania    | [Rock]      | [English]                | [pink floyd, ..]  | 1.51 - 5.34  |
+| id_playlist |   title   |  url  | length| mode     | genres      | languages                | tags              | difficulty | 
+| ----------- | --------- | ----- |------ | -------- | ----------- | ------------------------ | ----------------- | ------------ |
+| 0           |  salle    | url1  |50     | all      | [Jeu vidéo] | [Instumental]            | [pokemon, ..]     | 1.02 - 3.13  |
+| 1           |   eau     | url2  |20     | fruits   | [Anime]     | [Japanese, Instrumental] | [dragon ball, ..] | 2.11 - 4.51  |
+| 2           |  2prohf   | url3  |10     | mania    | [Rock]      | [English]                | [pink floyd, ..]  | 1.51 - 5.34  |
+
+On peut cliquer sur le titre qui amène vers la playlist téléchargement.
+
+# Mise à jour des données et appel à l'API externe
+
+Les données sont mises à jour en temps réel lorsqu'un utilisateur crée une nouvelle playlist ou modifie ses préférences. L'API externe est appelée pour alimenter la base de données mettant à jour toutes les beatmaps du site. On pourrait appeler l'API tous les jours à 5:00 UTC+1.
+
+# Description du Serveur
+
+Le site utilise GO avec le package net/http, avec une approche basée sur des ressources, avec un ensemble de services RESTful pour gérer les utilisateurs, les playlists, et les interactions avec l'API d'Osu!. Chaque service est conçu pour gérer un aspect spécifique de l'application, comme la création de playlists, la gestion des utilisateurs, et le recueil des feedbacks.
+
+## Ressources et Fonctionnalités Associées
+
+- **Utilisateurs (/users)**:
+
+    - GET /users/{id}: Récupère les informations d'un utilisateur spécifique.
+    - POST /users: Crée un nouvel utilisateur.
+    - PUT /users/{id}: Met à jour les informations d'un utilisateur.
+    - DELETE /users/{id}: Supprime un utilisateur.
+
+- **Playlists (/playlists)**:
+
+    - GET /playlists/{id}: Récupère une playlist spécifique.
+    - GET /playlists: Récupère toutes les playlists selon les filtres appliqués (genre, langue, difficulté, etc.).
+    - POST /playlists: Crée une nouvelle playlist basée sur les préférences de l'utilisateur.
+    - PUT /playlists/{id}: Met à jour une playlist (ajouter/enlever des beatmaps, changer le titre, etc.).
+    - DELETE /playlists/{id}: Supprime une playlist.
+
+- **Beatmaps (/beatmaps)**:
+
+    - GET /beatmaps: Récupère les beatmaps depuis l'API externe osu!web selon les critères spécifiés (mode, difficulté, tags, genre, langue).
+
+- **Commentaires (/comments)**:
+
+    - GET /comments: Récupère les commentaires sur une playlist spécifique.
+    - POST /comments: Ajoute un commentaire à une playlist.
+    - DELETE /comments/{id}: Supprime un commentaire.
+
+- **Likes (/likes)**:
+
+    - POST /likes: Ajoute un like à une playlist.
+    - DELETE /likes/{id}: Supprime un like d'une playlist.
+
+# Description du Client
+
+Le site est conçu avec React.js pour offrir une expérience utilisateur fluide. Les écrans incluent une page d'accueil, une interface de création de playlists, une page de découverte, et une section communauté. Les appels au serveur sont effectués à partir de ces différentes sections pour récupérer ou envoyer des données.
+
+## Plan du Site et Contenu des Écrans
+
+- **Page d'Accueil**:
+    - Génération de playlists basée sur des filtres spécifiés par l'utilisateur.
+    - Affichage des playlists générées avec options pour sauvegarder, partager, et commenter.
+
+- **Page de Playlist**:
+    - Détails de la playlist sélectionnée avec liste des beatmaps, possibilité de modifier la playlist (ajouter/enlever des beatmaps, changer l'ordre, etc.).
+
+- **Profil Utilisateur**:
+    - Affichage des informations de l'utilisateur, liste de ses playlists, et historique des commentaires.
+
+## Appels Serveur
+
+- Les playlists sont générées en envoyant une requête POST à /playlists avec les préférences de l'utilisateur.
+- Les détails d'une playlist sont récupérés via GET /playlists/{id}.
+- Les commentaires sont ajoutés en envoyant une requête POST à /comments.
+- Les likes sont gérés par POST et DELETE sur /likes et /likes/{id} respectivement.
+
+# Requêtes et Réponses
+
+- **Générer une Playlist**:
+
+    - Requête: POST /playlists avec le corps contenant les préférences (genre, difficulté, tags, etc.).
+    - Réponse: JSON avec les détails de la playlist créée.
+
+- **Récupérer une Playlist**:
+
+    - Requête: GET /playlists/{id}.
+    - Réponse: JSON avec les détails de la playlist, incluant les beatmaps.
+
+- **Ajouter un Commentaire**:
+
+    - Requête: POST /comments avec le corps contenant l'id de la playlist et le commentaire.
+    - Réponse: JSON confirmant l'ajout du commentaire.
+
+# Schéma global du système
 
