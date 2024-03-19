@@ -69,6 +69,12 @@ Le site utilise GO avec le package net/http, avec une approche basée sur des re
 
 ## Ressources et Fonctionnalités Associées
 
+- **Authentification (/auth)**:
+  
+    - POST /auth/login: Permet à un utilisateur de se connecter en envoyant son identifiant et mot de passe.
+    - POST /auth/logout: Permet à un utilisateur de se déconnecter.
+    - POST /auth/register: Permet à un nouvel utilisateur de s'inscrire en fournissant les informations nécessaires.
+
 - **Utilisateurs (/users)**:
 
     - GET /users/{id}: Récupère les informations d'un utilisateur spécifique.
@@ -105,18 +111,26 @@ Le site est conçu avec React.js pour offrir une expérience utilisateur fluide.
 
 ## Plan du Site et Contenu des Écrans
 
+- **Page de connexion**:
+    - Formulaire de connexion avec champs pour l'identifiant et le mot de passe avec bouton pour se connecter.
+    - Lien vers la page d'inscription pour les nouveaux utilisateurs qui n'ont pas encore de compte.
+    - Lien vers la récupération de mot de passe pour les utilisateurs qui ont oublié leur mot de passe.
+    
 - **Page d'Accueil**:
     - Génération de playlists basée sur des filtres spécifiés par l'utilisateur.
     - Affichage des playlists générées avec options pour sauvegarder, partager, et commenter.
 
 - **Page de Playlist**:
-    - Détails de la playlist sélectionnée avec liste des beatmaps, possibilité de modifier la playlist (ajouter/enlever des beatmaps, changer l'ordre, etc.).
+    - Détails de la playlist sélectionnée avec liste des beatmaps, possibilité de modifier la playlist (ajouter/enlever des beatmaps, changer l'ordre, etc).
 
 - **Profil Utilisateur**:
     - Affichage des informations de l'utilisateur, liste de ses playlists, et historique des commentaires.
 
 ## Appels Serveur
 
+- Requête POST pour vérifier les informations de connexion de l'utilisateur. Cette requête vérifiera les informations saisies dans le formulaire de connexion et authentifiera l'utilisateur:
+    - Si les informations de connexion sont valides, une réponse réussie (code 200) sera renvoyée, et l'utilisateur sera redirigé vers la page d'accueil.
+    - En cas d'échec de la connexion, une réponse d'erreur (code 401 ou 403) sera renvoyée, et un message d'erreur approprié sera affiché à l'utilisateur sur la page de connexion.
 - Les playlists sont générées en envoyant une requête POST à /playlists avec les préférences de l'utilisateur.
 - Les détails d'une playlist sont récupérés via GET /playlists/{id}.
 - Les commentaires sont ajoutés en envoyant une requête POST à /comments.
