@@ -97,7 +97,7 @@ Le site utilise GO avec le package net/http, avec une approche basée sur des re
 - **Commentaires (/comments)**:
 
     - GET /comments: Récupère les commentaires sur une playlist spécifique.
-    - POST /comments: Ajoute un commentaire à une playlist.
+    - PUT /comments: Ajoute un commentaire à une playlist.
     - DELETE /comments/{id}: Supprime un commentaire.
 
 - **Likes (/likes)**:
@@ -137,21 +137,13 @@ Le site est conçu avec React.js pour offrir une expérience utilisateur fluide.
 - Les likes sont gérés par POST et DELETE sur /likes et /likes/{id} respectivement.
 
 # Requêtes et Réponses
-
-- **Générer une Playlist**:
-
-    - Requête: POST /playlists avec le corps contenant les préférences (genre, difficulté, tags, etc.).
-    - Réponse: JSON avec les détails de la playlist créée.
-
-- **Récupérer une Playlist**:
-
-    - Requête: GET /playlists/{id}.
-    - Réponse: JSON avec les détails de la playlist, incluant les beatmaps.
-
-- **Ajouter un Commentaire**:
-
-    - Requête: POST /comments avec le corps contenant l'id de la playlist et le commentaire.
-    - Réponse: JSON confirmant l'ajout du commentaire.
+  
+| Nom du web service | URL du web service | Description du service | Paramètres en entrée | Format de sortie | Exemple de sortie |   Erreurs possibles   | Avancement du Service | Classes/Fichiers GO | Informations additionnelles |
+| ---------------- | ------------------- | ---------------- | ----------------- | ----------------- | ---------------- |  -----------------------------------------------------  | -------------------- | -------------------- | -------------------- |
+| Login | auth/login/ avec POST | Permet de récupérer une clef de connexion valide pendant un certain temps | login; password | JSON | - {"status": 200, "message": "Connexion réussie", "userid": "6442546cd354647be214"};<br/> - {"status": 400, "message": "Requête invalide: login et password nécessaires"};<br/>  - {"status": 401, "message": "Utilisateur inconnu"};<br/>  - {"status": 403, "message": "Login et/ou mot de passe invalide(s)"};<br/>  - {"status": 500, "message": "Erreur interne"};<br/> | - Champs manquants (400)<br/> - Utilisateur inconnu (401)<br/> - Login et/ou mot de passe invalide(s) (403)<br/> - Erreur interne (500) | En cours | api.go | 1. Si tout se passe bien renvoyer le code 200 et Connexion réussie, et création de la session avec req.session.userid<br/> 2. Tous les champs doivent être complétés, si non -> 400<br/> 3. Vérification de l’existence du login, si non -> 401<br/> 4. Vérification du login et mot de passe, si non -> 403 |
+| Générer Playlist | /playlists avec POST | Permet de générer une playlist | les préférences (genre, difficulté, tags, etc) | JSON | - {"status": 200, "message": "Playlist générée avec succès"};<br/> - {"status": 500, "message": "Erreur interne"}; | - Utilisateur inconnu (401) | En cours | api.go | 1. Si tout se passe bien renvoyer le code 200 et Playlist générée, et création de la playlist |
+| Récupérer une Playlist | /playlists/{id} avec GET | Permet de récupérer une Playlist | l'id de la Playlist | JSON, Tableau | - [{"date" : "17/04/2002", "auteur": "1d5s1s88d5f4s64f", "likes": 5, "commentaires": {"comm1: "}, "beatmaps" : {"beatmap1": "Symphony of the night"}, {beatmap2": ...}, {...}},  , ;<br/> - {"status": 404, "message": Playlist pas trouvée<br/> - {"status": 500, "message": "Erreur interne"}; | - Utilisateur inconnu (401)<br/> - Playlist pas trouvée (404) | En cours | api.go |  1. Si tout se passe bien renvoyer le code 200 et Playlist récupérée<br/> |
+| Ajouter un commentaire | comments/ avec PUT | Permet de poster un commentaire pour une Playlist | parentId, login, date, clock, content | JSON | - {"status": 200, "message": "Commentaire posté avec succès"};<br/> - {"status": 400, "message": Commentaire vide"}; | - Non connecté (401)<br/> - Champs manquants (400)<br/> - Commentaire vide (400)<br/> - Erreur interne (500) | En cours | Messages/messages.go | - Vérification de la connexion -> 401<br/> - Vérification des champs manquants -> 400<br/> - Création du commentaire avec la fonction createComment<br/> - Si tout se passe bien -> 200 “Commentaire créé avec succès” |
 
 # Schéma global du système
 
