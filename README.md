@@ -147,3 +147,23 @@ Le site est conçu avec React.js pour offrir une expérience utilisateur fluide.
 
 # Schéma global du système
 
+/osu-beatadvisor/
+│
+├── /api/                     # Centralized API interaction and user management
+│   ├── api.go                # Main handler for all API requests, routing to specific functionalities
+│
+├── /models/                  # Data models for the application
+│   ├── user.go               # User model
+│   ├── playlist.go           # Playlist model
+│   ├── beatmap.go            # Beatmap model
+│   ├── comment.go            # Comment model
+│   ├── like.go               # Like model
+|   ├── share.go              # Share model
+│
+├── /util/                    # Utility functions and common definitions
+│   ├── session.go            # Session management utilities
+│   ├── error.go              # Error handling utilities
+│   ├── response.go           # Common response formatting utilities
+│
+└── /osu!api/                 # Database interaction extracted from the osu!api website
+    ├── osu.go                # Database connection and common operations
