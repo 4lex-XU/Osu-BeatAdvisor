@@ -1,12 +1,12 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { useState } from "react";
+import axios from "axios";
 
 export default function SaisieMessage(props) {
-  const [text, setText] = useState('');
-  const [error, setError] = useState('');
+  const [text, setText] = useState("");
+  const [error, setError] = useState("");
   const currentDate = new Date();
-  const date = currentDate.toLocaleDateString('fr');
-  const clock = currentDate.getHours() + ':' + currentDate.getMinutes();
+  const date = currentDate.toLocaleDateString("fr");
+  const clock = currentDate.getHours() + ":" + currentDate.getMinutes();
 
   const getContent = (evt) => setText(evt.target.value);
 
@@ -15,19 +15,19 @@ export default function SaisieMessage(props) {
     setError(null);
     const data = {
       text: text,
-      date: date + ' ' + clock,
+      date: date + " " + clock,
     };
     axios
       .post(`playlist/comment/${props.playlistId}`, data, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-        credentials: 'include',
+        credentials: "include",
       })
       .then((res) => {
         console.log(res.data);
-        setText('');
+        setText("");
         props.setCommentaires([...props.commentaires, data]);
       })
       .catch((err) => {
@@ -49,11 +49,11 @@ export default function SaisieMessage(props) {
         />
         <p className="date">
           {clock}
-          {' · '}
+          {" · "}
           {date}
         </p>
         {error && (
-          <p style={{ color: 'red', fontSize: '12px' }}>
+          <p style={{ color: "red", fontSize: "12px" }}>
             {error.message} {error.detail}
           </p>
         )}

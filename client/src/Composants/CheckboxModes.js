@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+
 export default function CheckboxModes(props) {
   const list = [
-    { id: '29', name: 'osu' },
-    { id: '30', name: 'taiko' },
-    { id: '31', name: 'fruits' },
-    { id: '32', name: 'mania' },
+    { id: "29", name: "osu" },
+    { id: "30", name: "taiko" },
+    { id: "31", name: "fruits" },
+    { id: "32", name: "mania" },
   ];
   const [isCheckAll, setIsCheckAll] = useState(false);
 

@@ -14,7 +14,7 @@ import SaisieMessage from './SaisieMessage';
 import ListeMessages from './ListeMessages';
 
 export default function Playlist(props) {
-  const [playlist, setPlaylist] = useState(null);
+  const [playlist, setPlaylist] = useState(props.playlist);
   const [mettreAJour, setMettreAJour] = useState(false);
   const [afficher, setAfficher] = useState(false);
   const [erreur, setErreur] = useState(null);
@@ -29,38 +29,41 @@ export default function Playlist(props) {
   const [title, setTitle] = useState(props.title);
   const [genres, setGenres] = useState([]);
   const [languages, setLanguages] = useState([]);
+  const [description, setDescription] = useState('');
 
   const toggleDetails = () => {
-    if (playlist) {
-      setAfficher(!afficher);
-    } else {
-      axios
-      .get(`/playlist/${props.playlistId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        withCredentials: true,
-        credentials: 'include',
-      })
-      .then((res) => {
-        console.log(res.data);
-        setPlaylist(res.data);
-        if (res.data.Likes) {
-          setLikes(res.data.Likes);
-          if (res.data.Likes.includes(props.myLogin)) {
-            setIsLiked(true);
-          }
-        }
-        if (res.data.Comments) {
-          setCommentaires(res.data.Comments);
-        }
-        setAfficher(true);
-      })
-      .catch((err) => {
-        console.log(err.response.data);
-        setErreur(err.response.data);
-      });    
-    }
+    setAfficher(!afficher);
+
+    // if (playlist) {
+    //   setAfficher(!afficher);
+    // } else {
+    //   axios
+    //   .get(`/playlist/${props.playlistId}`, {
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     withCredentials: true,
+    //     credentials: 'include',
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setPlaylist(res.data);
+    //     if (res.data.Likes) {
+    //       setLikes(res.data.Likes);
+    //       if (res.data.Likes.includes(props.myLogin)) {
+    //         setIsLiked(true);
+    //       }
+    //     }
+    //     if (res.data.Comments) {
+    //       setCommentaires(res.data.Comments);
+    //     }
+    //     setAfficher(true);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err.response.data);
+    //     setErreur(err.response.data);
+    //   });
+    // }
   };
 
   const fetchPlaylist = () => {
@@ -73,26 +76,25 @@ export default function Playlist(props) {
           credentials: 'include',
         })
         .then((res) => {
-          console.log(res.data);
-          setPlaylist(res.data);
-          if (res.data.Likes) {
-            setLikes(res.data.Likes);
-            if (res.data.Likes.includes(props.myLogin)) {
-              setIsLiked(true);
-            }
-          }
-          if (res.data.Comments) {
-            setCommentaires(res.data.Comments);
-          }
-          setLanguages(playlist.Languages);
-          setGenres(playlist.Genres);
-          setTitle(playlist.Title);
+          // console.log("playlist :", res.data); // 🔍 Vérifier si l'API renvoie bien les données
+
+          setPlaylist(res.data); // ✅ Mettre à jour la playlist avant d'utiliser ses valeurs
+
+          setLikes(res.data.Likes || []);
+          setIsLiked(res.data.Likes?.includes(props.myLogin) || false);
+          setCommentaires(res.data.Comments || []);
+
+          setLanguages(res.data.Languages || []);
+          setGenres(res.data.Genres || []);
+          setTitle(res.data.Title || "Sans Titre");
+          setDescription(res.data.Description || "Pas de description disponible.");
         })
         .catch((err) => {
-          console.log(err.response.data);
-          setErreur(err.response.data);
+          console.log(err.response?.data || "Erreur lors du chargement de la playlist");
+          setErreur(err.response?.data);
         });
   };
+
   const handlerSaisie = (evt) => {
     if (saisir) setSaisir(false);
     else setSaisir(true);
@@ -346,11 +348,12 @@ export default function Playlist(props) {
               {playlist.Author}
             </a>
           </p>
+          <p>Description : {playlist.Description}</p>
           <p>Modes : {playlist.Modes.join(', ')}</p>
           <p>Difficulté : {playlist.Difficulty}</p>
-          <p>Langues : {languages.join(', ')}</p>
-          <p>Genres : {genres.join(', ')}</p>
-          <p>Statuts : {playlist.Status}</p>
+          <p>Langues : {playlist.Languages.join(', ')}</p>
+          <p>Genres : {playlist.Genres.join(', ')}</p>
+          <p>Statuts : {Array.from(new Set(playlist.Beatmaps.map(map => map.Status))).join(', ')}</p>
           <p>Nombres de Beatmaps : {playlist.Beatmaps.length}</p>
           <ul>
             {playlist.Beatmaps != null &&

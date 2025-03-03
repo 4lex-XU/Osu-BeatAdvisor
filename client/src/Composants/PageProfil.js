@@ -36,7 +36,7 @@ export default function PageProfil(props) {
         credentials: 'include',
       })
       .then((res) => {
-        console.log(res.data);
+        console.log("playlists: ",res.data);
         setPlaylists(res.data.playlists);
       })
       .catch((err) => {

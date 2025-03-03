@@ -1,22 +1,21 @@
-import React, { useState } from 'react';
-import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
-import osuButton from '../Images/osuButton.png';
-import '../CSS/osu_button.css';
-import CheckboxModes from './CheckboxModes';
-import RangeSliderDiffilculty from './RangeSliderDifficulty';
-import CheckboxGenres from './CheckboxGenres';
-import CheckboxLanguages from './CheckboxLanguages';
-import CheckboxCategories from './CheckboxCategories';
-import Modal from './Modal';
-import Playlist from './Playlist';
-import axios from 'axios';
+import React, { useState } from "react";
+import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
+import osuButton from "../Images/osuButton.png";
+import "../CSS/osu_button.css";
+import CheckboxModes from "./CheckboxModes";
+import RangeSliderDiffilculty from "./RangeSliderDifficulty";
+import CheckboxGenres from "./CheckboxGenres";
+import CheckboxLanguages from "./CheckboxLanguages";
+import CheckboxCategories from "./CheckboxCategories";
+import Modal from "./Modal";
+import axios from "axios";
 
 export default function HomePage(props) {
   const [showOptions, setShowOptions] = useState(false);
   const [genres, setGenres] = useState([]);
   const [languages, setLanguages] = useState([]);
-  const [size, setSize] = useState('0');
-  const [title, setTitle] = useState('');
+  const [size, setSize] = useState("0");
+  const [title, setTitle] = useState("");
   const [minDifficulty, setMinDifficulty] = useState(0);
   const [maxDifficulty, setMaxDifficulty] = useState(10);
   const [status, setStatus] = useState([]);
@@ -28,20 +27,32 @@ export default function HomePage(props) {
     setShowOptions(!showOptions);
   };
 
+  const isGenerateDisabled = () => {
+    return (
+      title.trim() === "" || // Vérifie si le titre est vide
+      size === "0" ||
+      size === "" || // Vérifie si la taille est vide ou 0
+      modes.length === 0 || // Vérifie s'il y a au moins un mode
+      status.length === 0 || // Vérifie s'il y a au moins un status (ex: ranked)
+      genres.length === 0 || // Vérifie s'il y a au moins un genre
+      languages.length === 0 // Vérifie s'il y a au moins une langue
+    );
+  };
+
   const handleGenerate = (evt) => {
     evt.preventDefault();
-    if (size === '0' || size === '') {
+    if (size === "0" || size === "") {
       setError({
-        message: 'Erreur',
-        detail: 'Le nombre de maps doit être supérieur à 0',
+        message: "Erreur",
+        detail: "Le nombre de maps doit être supérieur à 0",
       });
       return;
     }
     if (minDifficulty > maxDifficulty) {
       setError({
-        message: 'Erreur',
+        message: "Erreur",
         detail:
-          'La difficulté minimale doit être inférieure à la difficulté maximale',
+          "La difficulté minimale doit être inférieure à la difficulté maximale",
       });
       return;
     }
@@ -51,19 +62,43 @@ export default function HomePage(props) {
       languages: languages,
       size: size,
       title: title,
-      difficulty: minDifficulty + '-' + maxDifficulty,
+      difficulty: minDifficulty + "-" + maxDifficulty,
       status: status,
       modes: modes,
     };
     console.log(data);
     axios
-      .post('/playlist/create', data, {
+      .post("/playlist/create", data, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-        credentials: 'include',
+        credentials: "include",
       })
+      .then((response) => {
+        console.log(response.data);
+        setIsModalOpen(true);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+        setError(error.response.data);
+      });
+  };
+
+  const handleGenerateFromMyPlaylists = (evt) => {
+    evt.preventDefault();
+    axios
+      .post(
+        "/playlist/generate-from-my-playlists",
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+          credentials: "include",
+        },
+      )
       .then((response) => {
         console.log(response.data);
         setIsModalOpen(true);
@@ -80,18 +115,18 @@ export default function HomePage(props) {
   };
 
   return (
-    <div >
+    <div>
       <div
         className={`button-container-osu ${
-          showOptions ? 'shift-left' : 'shift-right'
+          showOptions ? "shift-left" : "shift-right"
         }`}
       >
         <button
           className="osu-button"
           onClick={toggleOptions}
-          style={{ border: 'none', background: 'none', padding: 0 }}
-          onMouseOver={(e) => (e.currentTarget.style.transform = 'scale(1.2)')}
-          onMouseOut={(e) => (e.currentTarget.style.transform = 'scale(1)')}
+          style={{ border: "none", background: "none", padding: 0 }}
+          onMouseOver={(e) => (e.currentTarget.style.transform = "scale(1.2)")}
+          onMouseOut={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
           <img src={osuButton} alt="osu!" />
         </button>
@@ -109,6 +144,11 @@ export default function HomePage(props) {
                 onChange={(e) => setSize(e.target.value)}
               />
             </div>
+            <input
+              type="text"
+              placeholder="Description"
+              onChange={(e) => setTitle(e.target.value)}
+            />
             <CheckboxModes setIsCheck={setModes} isCheck={modes} />
             <RangeSliderDiffilculty
               min={minDifficulty}
@@ -119,11 +159,11 @@ export default function HomePage(props) {
             <CheckboxCategories setIsCheck={setStatus} isCheck={status} />
             <CheckboxGenres setIsCheck={setGenres} isCheck={genres} />
             <CheckboxLanguages setIsCheck={setLanguages} isCheck={languages} />
-            <button type="submit" onClick={handleGenerate}>
+            <button type="submit" onClick={handleGenerate} disabled={true}>
               Générer
             </button>
             {error && (
-              <p style={{ color: 'red' }}>
+              <p style={{ color: "red" }}>
                 {error.message} {error.detail}
               </p>
             )}
@@ -134,7 +174,7 @@ export default function HomePage(props) {
         <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)}>
           <div>
             <p>
-              Votre playlist a été générée avec succès. Voir votre{' '}
+              Votre playlist a été générée avec succès. Voir votre{" "}
               <a href="a" onClick={handleProfile}>
                 bibliothèque
               </a>

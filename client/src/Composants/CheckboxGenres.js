@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export default function CheckboxGenres(props) {
   const list = [
-    { id: '08', name: 'video game' },
-    { id: '09', name: 'anime' },
-    { id: '10', name: 'rock' },
-    { id: '11', name: 'pop' },
-    { id: '12', name: 'funk' },
-    { id: '13', name: 'hip hop' },
-    { id: '14', name: 'electronic' },
-    { id: '15', name: 'metal' },
-    { id: '16', name: 'classical' },
-    { id: '17', name: 'folk' },
-    { id: '18', name: 'jazz' },
+    { id: "08", name: "video game" },
+    { id: "09", name: "anime" },
+    { id: "10", name: "rock" },
+    { id: "11", name: "pop" },
+    { id: "12", name: "funk" },
+    { id: "13", name: "hip hop" },
+    { id: "14", name: "electronic" },
+    { id: "15", name: "metal" },
+    { id: "16", name: "classical" },
+    { id: "17", name: "folk" },
+    { id: "18", name: "jazz" },
   ];
   const [isCheckAll, setIsCheckAll] = useState(false);
 

@@ -1,17 +1,17 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function EditerProfil(props) {
-  const [newLogin, setNewLogin] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [newPasswordConfirm, setNewPasswordConfirm] = useState('');
-  const [ville, setVille] = useState('');
-  const [naissance, setNaissance] = useState('');
-  const [description, setDescription] = useState('');
+  const [newLogin, setNewLogin] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+  const [ville, setVille] = useState("");
+  const [naissance, setNaissance] = useState("");
+  const [description, setDescription] = useState("");
   const [PassOk, setPassOk] = useState(true);
-  const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const getNewLogin = (evt) => {
     setNewLogin(evt.target.value);
@@ -36,10 +36,10 @@ export default function EditerProfil(props) {
     axios
       .get(`/user/${props.myLogin}`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-        credentials: 'include',
+        credentials: "include",
       })
       .then((res) => {
         setLogin(res.data.Pseudo);
@@ -57,23 +57,23 @@ export default function EditerProfil(props) {
     evt.preventDefault();
     if (newPassword === newPasswordConfirm) {
       const data = new URLSearchParams();
-      data.append('login', newLogin);
-      data.append('password', newPassword);
-      data.append('ville', ville);
-      data.append('naissance', naissance);
-      data.append('description', description);
+      data.append("login", newLogin);
+      data.append("password", newPassword);
+      data.append("ville", ville);
+      data.append("naissance", naissance);
+      data.append("description", description);
       console.log(data);
       axios
         .put(`/user/edit`, data, {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            "Content-Type": "application/x-www-form-urlencoded",
           },
           withCredentials: true,
-          credentials: 'include',
+          credentials: "include",
         })
         .then((res) => {
           console.log(res.data);
-          if (newLogin !== '') {
+          if (newLogin !== "") {
             props.setMyLogin(newLogin);
             props.setCurrentPage(newLogin);
             return;
@@ -107,7 +107,7 @@ export default function EditerProfil(props) {
         />
         <label htmlFor="newDesciption">Bio</label>
         <textarea
-          style={{ resize: 'none', with: '100%' }}
+          style={{ resize: "none", with: "100%" }}
           type="text"
           id="newDesciption"
           className="newDesciption"
@@ -136,7 +136,7 @@ export default function EditerProfil(props) {
           id="newPassword"
           className="newPassword"
           onChange={getNewPassword}
-          placeholder={'......'}
+          placeholder={"......"}
         />
         <label htmlFor="newPasswordConfirm">Confirm password</label>
         <input
@@ -144,15 +144,15 @@ export default function EditerProfil(props) {
           id="newPasswordConfirm"
           className="newPasswordConfirm"
           onChange={getNewPasswordConfirm}
-          placeholder={'......'}
+          placeholder={"......"}
         />
 
         <button type="submit">Valider</button>
         {!PassOk && (
-          <p style={{ color: 'red' }}>Les mots de passe ne correspondent pas</p>
+          <p style={{ color: "red" }}>Les mots de passe ne correspondent pas</p>
         )}
         {error && (
-          <p style={{ color: 'red' }}>
+          <p style={{ color: "red" }}>
             {error.message} {error.detail}
           </p>
         )}

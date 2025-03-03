@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+
 export default function CheckboxCategories(props) {
   const list = [
-    { id: '01', name: 'graveyard' },
-    { id: '02', name: 'wip' },
-    { id: '03', name: 'pending' },
-    { id: '04', name: 'ranked' },
-    { id: '05', name: 'approved' },
-    { id: '06', name: 'qualified' },
-    { id: '07', name: 'loved' },
+    { id: "01", name: "graveyard" },
+    { id: "02", name: "wip" },
+    { id: "03", name: "pending" },
+    { id: "04", name: "ranked" },
+    { id: "05", name: "approved" },
+    { id: "06", name: "qualified" },
+    { id: "07", name: "loved" },
   ];
   const [isCheckAll, setIsCheckAll] = useState(false);
 
