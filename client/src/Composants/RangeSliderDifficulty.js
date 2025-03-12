@@ -1,9 +1,9 @@
-import RangeSlider from 'react-bootstrap-range-slider';
+import RangeSlider from "react-bootstrap-range-slider";
 
 export default function RangeSliderDiffilculty(props) {
   return (
     <div className="row-osu-form">
-      {' '}
+      {" "}
       <div className="row-osu-form">
         <label>Difficulté min:</label>
 
@@ -13,7 +13,8 @@ export default function RangeSliderDiffilculty(props) {
             if (e.target.value > props.max) {
               props.setMax(e.target.value);
             }
-            props.setMin(e.target.value)}}
+            props.setMin(e.target.value);
+          }}
           min={0}
           max={10}
         />
@@ -27,7 +28,8 @@ export default function RangeSliderDiffilculty(props) {
             if (e.target.value < props.min) {
               props.setMin(e.target.value);
             }
-            props.setMax(e.target.value)}}
+            props.setMax(e.target.value);
+          }}
           min={0}
           max={10}
         />

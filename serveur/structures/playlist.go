@@ -20,8 +20,9 @@ type Playlist struct {
 	Beatmaps []Beatmap
 	Size     int
 
-	Likes    []string
-	Comments []Comment
+	Likes       []string
+	Comments    []Comment
+	Description string
 }
 
 type Beatmap struct {
@@ -55,7 +56,7 @@ type Beatmapset struct {
    -------------------
 */
 
-func NewPlaylist(title string, url string, modes []string, difficulty string, genres, languages, tags []string, beatmaps []Beatmap, size int) *Playlist {
+func NewPlaylist(title string, url string, modes []string, difficulty string, genres, languages, tags []string, beatmaps []Beatmap, size int, description string) *Playlist {
 	// lock.Lock()
 	// defer lock.Unlock()
 	// userIDCounter++
@@ -71,5 +72,6 @@ func NewPlaylist(title string, url string, modes []string, difficulty string, ge
 		Tags:        tags,
 		Beatmaps:    beatmaps,
 		Size:        size,
+		Description: description,
 	}
 }

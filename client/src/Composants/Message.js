@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import axios from "axios";
 
 export default function Message(props) {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -24,17 +24,17 @@ export default function Message(props) {
     axios
       .delete(`/user/${props.id}/messages`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-        credentials: 'include',
+        credentials: "include",
       })
       .then((res) => {
         console.log(res.data);
         props.setCommentaires(
           props.commentaires.filter(
-            (commentaire) => commentaire.Id !== props.Id
-          )
+            (commentaire) => commentaire.Id !== props.Id,
+          ),
         );
       })
       .catch((err) => {
@@ -47,10 +47,10 @@ export default function Message(props) {
     axios
       .get(`/user/${props.myLogin}/friends/${props.login}`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-        credentials: 'include',
+        credentials: "include",
       })
       .then((res) => {
         setIsAbonne(res.data);
@@ -69,10 +69,10 @@ export default function Message(props) {
     axios
       .put(`/user/${props.myLogin}/newfriend`, data, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-        credentials: 'include',
+        credentials: "include",
       })
       .then((res) => {
         console.log(res.data);
@@ -89,10 +89,10 @@ export default function Message(props) {
     axios
       .delete(`/user/${props.myLogin}/friends/${props.author}`, {
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         withCredentials: true,
-        credentials: 'include',
+        credentials: "include",
       })
       .then((res) => {
         console.log(res.data);

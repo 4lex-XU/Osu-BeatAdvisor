@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 export default function CheckboxLanguages(props) {
   const list = [
-    { id: '19', name: 'english' },
-    { id: '20', name: 'chinese' },
-    { id: '21', name: 'french' },
-    { id: '22', name: 'german' },
-    { id: '23', name: 'italian' },
-    { id: '24', name: 'japanese' },
-    { id: '25', name: 'korean' },
-    { id: '26', name: 'spanish' },
-    { id: '27', name: 'russian' },
-    { id: '28', name: 'instrumental' },
+    { id: "19", name: "english" },
+    { id: "20", name: "chinese" },
+    { id: "21", name: "french" },
+    { id: "22", name: "german" },
+    { id: "23", name: "italian" },
+    { id: "24", name: "japanese" },
+    { id: "25", name: "korean" },
+    { id: "26", name: "spanish" },
+    { id: "27", name: "russian" },
+    { id: "28", name: "instrumental" },
   ];
   const [isCheckAll, setIsCheckAll] = useState(false);
 

@@ -1,13 +1,8 @@
-import { Navbar, Nav } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import ListePlaylistIcon from '../Images/music-note-list.svg';
+import { Nav, Navbar } from "react-bootstrap";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import ListePlaylistIcon from "../Images/music-note-list.svg";
 
-import {
-  faHome,
-  faUser,
-  faEdit,
-  faPowerOff,
-} from '@fortawesome/free-solid-svg-icons';
+import { faHome, faPowerOff, faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function NavigationPanel(props) {
   return (
@@ -19,7 +14,7 @@ export default function NavigationPanel(props) {
             <>
               <Nav.Link
                 href="#"
-                onClick={() => props.setCurrentPage('home_page')}
+                onClick={() => props.setCurrentPage("home_page")}
               >
                 <FontAwesomeIcon icon={faHome} /> Accueil
               </Nav.Link>
@@ -31,7 +26,7 @@ export default function NavigationPanel(props) {
               </Nav.Link>
               <Nav.Link
                 href="#"
-                onClick={() => props.setCurrentPage('all_playlists_page')}
+                onClick={() => props.setCurrentPage("all_playlists_page")}
               >
                 <img
                   src={ListePlaylistIcon}
@@ -48,13 +43,13 @@ export default function NavigationPanel(props) {
             <>
               <Nav.Link
                 href="#"
-                onClick={() => props.setCurrentPage('register_page')}
+                onClick={() => props.setCurrentPage("register_page")}
               >
                 Inscription
               </Nav.Link>
               <Nav.Link
                 href="#"
-                onClick={() => props.setCurrentPage('login_page')}
+                onClick={() => props.setCurrentPage("login_page")}
               >
                 Connexion
               </Nav.Link>

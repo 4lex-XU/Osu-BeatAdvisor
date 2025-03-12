@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-resty/resty/v2"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -25,13 +26,14 @@ import (
 
 // create playlist request
 type PlaylistRequest struct {
-	Genres     []string `json:"genres"`
-	Languages  []string `json:"languages"`
-	Title      string   `json:"title"`
-	Size       string   `json:"size"`
-	Difficulty string   `json:"difficulty"`
-	Status     []string `json:"status"`
-	Modes      []string `json:"modes"`
+	Genres      []string `json:"genres"`
+	Languages   []string `json:"languages"`
+	Title       string   `json:"title"`
+	Size        string   `json:"size"`
+	Difficulty  string   `json:"difficulty"`
+	Status      []string `json:"status"`
+	Modes       []string `json:"modes"`
+	Description *string  `json:"description,omitempty"` // Champ facultatif
 }
 
 // edit playlist request
@@ -302,6 +304,19 @@ func HandleCreatePlaylist(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Found ", len(beatmaps), " beatmaps")
+	fmt.Println("AVANT LE TRUC")
+	// Traiter la requête
+	description := ""
+	if request.Description != nil {
+		description = *request.Description // Déférencez le pointeur pour obtenir la valeur
+	} else {
+		generatedDescription, err := GeneratePlaylistDescription(request.Genres, request.Languages, request.Modes, request.Difficulty)
+		if err != nil {
+			description = "Description indisponible."
+		} else {
+			description = generatedDescription
+		}
+	}
 
 	playlist_id := primitive.NewObjectID()
 	var newPlaylist = structures.Playlist{
@@ -317,6 +332,7 @@ func HandleCreatePlaylist(w http.ResponseWriter, r *http.Request) {
 		Modes:       request.Modes,
 		Likes:       []string{},
 		Comments:    []structures.Comment{},
+		Description: description,
 	}
 
 	updatePlaylist(&newPlaylist)
@@ -832,4 +848,80 @@ func HandleGetAllPlaylists(w http.ResponseWriter, r *http.Request) {
 		"message":   "Playlists récupérées avec succès",
 		"playlists": playlists,
 	})
+}
+
+const AIML_API_KEY = "49ba21f8ce234ea88db6c7c493dd38dc"
+const AIML_API_URL = "https://api.aimlapi.com/v1/chat/completions"
+
+// Fonction pour générer une description avec AIML API
+func GeneratePlaylistDescription(genres, languages, modes []string, difficulty string) (string, error) {
+	client := resty.New()
+	fmt.Println("0")
+	// Limiter les listes à 3 éléments max à cause des limites de l'api gratuite
+	if len(genres) > 3 {
+		genres = genres[:3]
+	}
+	if len(languages) > 3 {
+		languages = languages[:3]
+	}
+	if len(modes) > 3 {
+		modes = modes[:2]
+	}
+	// Construire le prompt
+	prompt := fmt.Sprintf("Génère un bref paragraphe pour une playlist de beatmaps osu! en fonction de : Genres: %v, Langues: %v, Modes: %v, Difficulté: %s",
+		genres, languages, modes, difficulty)
+
+	// Construire la requête JSON
+	requestBody, _ := json.Marshal(map[string]interface{}{
+		"model": "gpt-4o",
+		"messages": []map[string]string{
+			{"role": "system", "content": "Tu es un assistant expert d'osu!."},
+			{"role": "user", "content": prompt},
+		},
+	})
+
+	// Effectuer la requête POST
+	resp, err := client.R().
+		SetHeader("Content-Type", "application/json").
+		SetHeader("Authorization", "Bearer "+AIML_API_KEY).
+		SetBody(requestBody).
+		Post(AIML_API_URL)
+
+	if err != nil {
+		return "", fmt.Errorf("erreur lors de l'appel à l'API AIML: %v", err)
+	}
+	fmt.Println("1")
+	fmt.Println("HTTP Status Code:", resp.StatusCode())
+	fmt.Println("Raw Response:", resp.String())
+
+	// Vérifier le statut HTTP
+	if resp.StatusCode() != http.StatusOK && resp.StatusCode() != http.StatusCreated {
+		return "", fmt.Errorf("erreur HTTP %d: %s", resp.StatusCode(), resp.String())
+	}
+
+	fmt.Println("2")
+
+	// Décode la réponse JSON
+	var response map[string]interface{}
+	err = json.Unmarshal(resp.Body(), &response)
+	if err != nil {
+		return "", fmt.Errorf("erreur lors du décodage JSON: %v", err)
+	}
+	fmt.Println("3")
+
+	// Vérifier la présence de "choices"
+	choices, ok := response["choices"].([]interface{})
+	if !ok || len(choices) == 0 {
+		return "", fmt.Errorf("aucune réponse valide reçue de l'API AIML: %v", response)
+	}
+	fmt.Println("4")
+
+	// Extraire la description
+	message, ok := choices[0].(map[string]interface{})["message"].(map[string]interface{})["content"].(string)
+	if !ok {
+		return "", fmt.Errorf("le format de réponse de l'API AIML ne correspond pas à ce qui était attendu")
+	}
+
+	fmt.Println("5")
+	return message, nil
 }
