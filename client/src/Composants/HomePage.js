@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import "react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css";
 import osuButton from "../Images/osuButton.png";
 import "../CSS/osu_button.css";
@@ -22,6 +22,12 @@ export default function HomePage(props) {
   const [modes, setModes] = useState([]);
   const [error, setError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isToggleActive, setIsToggleActive] = useState(false);
+  const [description, setDescription] = useState("");
+  const handleToggle = (event) => {
+    event.preventDefault(); // Empêche le comportement par défaut du bouton
+    setIsToggleActive(!isToggleActive);
+  };
 
   const toggleOptions = () => {
     setShowOptions(!showOptions);
@@ -65,6 +71,7 @@ export default function HomePage(props) {
       difficulty: minDifficulty + "-" + maxDifficulty,
       status: status,
       modes: modes,
+      ...(isToggleActive ? {} : { description }), // Ajoute 'description' uniquement si le toggle est désactivé
     };
     console.log(data);
     axios
@@ -144,11 +151,38 @@ export default function HomePage(props) {
                 onChange={(e) => setSize(e.target.value)}
               />
             </div>
-            <input
-              type="text"
-              placeholder="Description"
-              onChange={(e) => setTitle(e.target.value)}
-            />
+            <div style={{ display: 'flex',gap: '10px' }}>
+              <input
+                type="text"
+                placeholder="Description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                style={{
+                  flex: 1,
+                  padding: '8px',
+                  borderRadius: '4px',
+                  border: '1px solid #ccc',
+                  backgroundColor: isToggleActive ? '#f0f0f0' : '#fff', // Grisé si toggle activé
+                  color: isToggleActive ? '#a0a0a0' : '#000', // Texte grisé si toggle activé
+                  cursor: isToggleActive ? 'not-allowed' : 'text', // Curseur interdit si toggle activé
+                }}
+                disabled={isToggleActive}
+              />
+              <button
+                onClick={handleToggle}
+                style={{
+                  padding: '8px 16px',
+                  borderRadius: '20px',
+                  border: 'none',
+                  backgroundColor: isToggleActive ? '#007bff' : '#007bff',
+                  color: '#fff',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.3s ease',
+                }}
+              >
+                {isToggleActive ? 'Désactiver' : 'Activer'} la génération automatique
+              </button>
+            </div>
             <CheckboxModes setIsCheck={setModes} isCheck={modes} />
             <RangeSliderDiffilculty
               min={minDifficulty}
@@ -159,7 +193,8 @@ export default function HomePage(props) {
             <CheckboxCategories setIsCheck={setStatus} isCheck={status} />
             <CheckboxGenres setIsCheck={setGenres} isCheck={genres} />
             <CheckboxLanguages setIsCheck={setLanguages} isCheck={languages} />
-            <button type="submit" onClick={handleGenerate} disabled={true}>
+            <button type="submit" onClick={handleGenerate}
+            >
               Générer
             </button>
             {error && (

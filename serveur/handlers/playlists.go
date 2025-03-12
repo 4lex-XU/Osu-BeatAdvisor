@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/go-resty/resty/v2"
 	"math/rand"
 	"net/http"
 	"strconv"
@@ -25,13 +26,14 @@ import (
 
 // create playlist request
 type PlaylistRequest struct {
-	Genres     []string `json:"genres"`
-	Languages  []string `json:"languages"`
-	Title      string   `json:"title"`
-	Size       string   `json:"size"`
-	Difficulty string   `json:"difficulty"`
-	Status     []string `json:"status"`
-	Modes      []string `json:"modes"`
+	Genres      []string `json:"genres"`
+	Languages   []string `json:"languages"`
+	Title       string   `json:"title"`
+	Size        string   `json:"size"`
+	Difficulty  string   `json:"difficulty"`
+	Status      []string `json:"status"`
+	Modes       []string `json:"modes"`
+	Description *string  `json:"description,omitempty"` // Champ facultatif
 }
 
 // edit playlist request
@@ -302,9 +304,18 @@ func HandleCreatePlaylist(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Found ", len(beatmaps), " beatmaps")
-	description, err := GeneratePlaylistDescription(request.Genres, request.Languages, request.Modes, request.Difficulty)
-	if err != nil {
-		description = "Description indisponible."
+	fmt.Println("AVANT LE TRUC")
+	// Traiter la requête
+	description := ""
+	if request.Description != nil {
+		description = *request.Description // Déférencez le pointeur pour obtenir la valeur
+	} else {
+		generatedDescription, err := GeneratePlaylistDescription(request.Genres, request.Languages, request.Modes, request.Difficulty)
+		if err != nil {
+			description = "Description indisponible."
+		} else {
+			description = generatedDescription
+		}
 	}
 
 	playlist_id := primitive.NewObjectID()

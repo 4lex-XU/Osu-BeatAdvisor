@@ -202,7 +202,7 @@ func fetchNewToken() {
 	fmt.Println("Récupération d'un nouveau token en cours...")
 
 	// client id secret pour obtenir un token
-	data := "client_id=31082&client_secret=H5rzIds3OdHwHje1AP1ISxA3RyVSNgmIOv8F8H2b&grant_type=client_credentials&scope=public"
+	data := "client_id=38716&client_secret=rw9isRC0pFvyDQ9q1M4kxXvGD2dEYyDKodj6qpKn&grant_type=client_credentials&scope=public"
 	s := strings.NewReader(data)
 
 	// requête POST /oauth/token de l'api externe
