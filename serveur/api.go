@@ -1,9 +1,9 @@
 package main
 
 import (
-	"beatadvisor/serveur/data"
-	"beatadvisor/serveur/handlers"
-	"beatadvisor/serveur/structures"
+	"beatadvisor/data"
+	"beatadvisor/handlers"
+	"beatadvisor/structures"
 	"context"
 	"encoding/json"
 	"fmt"

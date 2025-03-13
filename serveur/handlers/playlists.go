@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"beatadvisor/serveur/data"
-	"beatadvisor/serveur/structures"
+	"beatadvisor/data"
+	"beatadvisor/structures"
 	"context"
 	"encoding/json"
 	"errors"
