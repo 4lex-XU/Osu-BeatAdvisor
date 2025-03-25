@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import "../CSS/styles.css";
 import "../CSS/formulaire.css";
 import "../CSS/message.css";
@@ -28,6 +28,9 @@ import ost10 from "../Musiques/ost10.mp3";
 
 export default function MainPage(props) {
   // states
+  const [musicAuthorized, setMusicAuthorized] = useState(false);
+
+  const [playStarted, setPlayStarted] = useState(false);
   const [isConnected, setConnect] = useState(false);
   const [currentPage, setCurrentPage] = useState("login_page");
   const [myLogin, setMyLogin] = useState("");
@@ -81,7 +84,7 @@ export default function MainPage(props) {
         credentials: "include",
       })
       .then((res) => {
-        console.log(res.data);
+        console.log("récup de toutes les playlists completes",res);
         setPlaylists(res.data.playlists);
       })
       .catch((err) => {
@@ -100,62 +103,80 @@ export default function MainPage(props) {
 
   // render
   return (
-    <div style={backgroundStyle}>
-      <header className="beatadvisor">
-        <BackgroundAudio sources={audios} />
-        <a className="logo" href="a" onClick={handler}>
-          <img src={logo} />
-        </a>
-        <aside>
-          <NavigationPanel
-            myLogin={myLogin}
-            setCurrentPage={setCurrentPage}
-            currentPage={currentPage}
-            setLogout={setLogout}
-            isConnected={isConnected}
-          />
-        </aside>
-      </header>
-      <main>
-        {currentPage === "register_page" ? (
-          <Register setCurrentPage={setCurrentPage} />
-        ) : isConnected ? (
-          currentPage === "home_page" ? (
-            <HomePage myLogin={myLogin} setCurrentPage={setCurrentPage} />
-          ) : currentPage === "edit_page" ? (
-            <EditerProfil
-              myLogin={myLogin}
-              setMyLogin={setMyLogin}
-              setCurrentPage={setCurrentPage}
-            />
-          ) : currentPage === "all_playlists_page" ? (
-            <div className="liste-playlists">
-              <h2>En ce moment :</h2>
-              <ListePlaylists
-                userProfil={props.userProfil}
-                myLogin={props.myLogin}
-                setCurrentPage={setCurrentPage}
-                playlists={playlists}
-                setPlaylists={setPlaylists}
-              />
+      <div style={backgroundStyle}>
+        <BackgroundAudio sources={audios} isPlaying={musicAuthorized} />
+        {!musicAuthorized ? (
+            <div className="modal-music">
+              <div className="modal-content-music">
+                <h4>Bienvenue sur BeatAdvisor!</h4>
+                <p>
+                  Ici, vous pourrez générer de nombreuses playlists pour vos
+                  sessions sur Osu!
+                </p>
+                <button onClick={() => setMusicAuthorized(true)}>
+                  Autoriser la musique de fond
+                </button>
+              </div>
             </div>
-          ) : (
-            <PageProfil
-              myLogin={myLogin}
-              userProfil={currentPage}
-              setCurrentPage={setCurrentPage}
-              setLogout={setLogout}
-              myPage={false}
-            />
-          )
         ) : (
-          <Login
-            setMyLogin={setMyLogin}
-            getConnected={getConnected}
-            setCurrentPage={setCurrentPage}
-          />
-        )}
-      </main>
-    </div>
+      <>
+        <header className="beatadvisor">
+          <a className="logo" href="a" onClick={handler}>
+            <img src={logo} />
+          </a>
+          <aside>
+            <NavigationPanel
+                myLogin={myLogin}
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                setLogout={setLogout}
+                isConnected={isConnected}
+            />
+          </aside>
+        </header>
+
+        <main>
+          {currentPage === "register_page" ? (
+              <Register setCurrentPage={setCurrentPage} />
+          ) : isConnected ? (
+              currentPage === "home_page" ? (
+                  <HomePage myLogin={myLogin} setCurrentPage={setCurrentPage} />
+              ) : currentPage === "edit_page" ? (
+                  <EditerProfil
+                      myLogin={myLogin}
+                      setMyLogin={setMyLogin}
+                      setCurrentPage={setCurrentPage}
+                  />
+              ) : currentPage === "all_playlists_page" ? (
+                  <div className="liste-playlists">
+                    <h2>En ce moment :</h2>
+                    <ListePlaylists
+                        userProfil={props.userProfil}
+                        myLogin={props.myLogin}
+                        setCurrentPage={setCurrentPage}
+                        playlists={playlists}
+                        setPlaylists={setPlaylists}
+                    />
+                  </div>
+              ) : (
+                  <PageProfil
+                      myLogin={myLogin}
+                      userProfil={currentPage}
+                      setCurrentPage={setCurrentPage}
+                      setLogout={setLogout}
+                      myPage={false}
+                  />
+              )
+          ) : (
+              <Login
+                  setMyLogin={setMyLogin}
+                  getConnected={getConnected}
+                  setCurrentPage={setCurrentPage}
+              />
+          )}
+        </main>
+      </>
+  )}
+      </div>
   );
 }

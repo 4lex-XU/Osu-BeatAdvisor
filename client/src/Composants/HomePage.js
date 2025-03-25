@@ -138,71 +138,84 @@ export default function HomePage(props) {
           <img src={osuButton} alt="osu!" />
         </button>
         {showOptions && (
-          <form className="options-container">
-            <div className="row-osu-form">
-              <input
-                type="text"
-                placeholder="Titre de la playlist"
-                onChange={(e) => setTitle(e.target.value)}
-              />
-              <input
-                type="number"
-                placeholder="Nombre de maps"
-                onChange={(e) => setSize(e.target.value)}
-              />
-            </div>
-            <div style={{ display: 'flex',gap: '10px' }}>
-              <input
-                type="text"
-                placeholder="Description"
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                style={{
-                  flex: 1,
-                  padding: '8px',
-                  borderRadius: '4px',
-                  border: '1px solid #ccc',
-                  backgroundColor: isToggleActive ? '#f0f0f0' : '#fff', // Grisé si toggle activé
-                  color: isToggleActive ? '#a0a0a0' : '#000', // Texte grisé si toggle activé
-                  cursor: isToggleActive ? 'not-allowed' : 'text', // Curseur interdit si toggle activé
-                }}
-                disabled={isToggleActive}
-              />
-              <button
-                onClick={handleToggle}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: '20px',
-                  border: 'none',
-                  backgroundColor: isToggleActive ? '#007bff' : '#007bff',
-                  color: '#fff',
-                  cursor: 'pointer',
-                  transition: 'background-color 0.3s ease',
-                }}
-              >
-                {isToggleActive ? 'Désactiver' : 'Activer'} la génération automatique
+            <form className="options-container">
+              {/* Infos de base */}
+              <div className="form-section">
+                <h3>🎵 Infos de base</h3>
+                <div className="row-osu-form">
+                  <input
+                      type="text"
+                      placeholder="Titre de la playlist"
+                      onChange={(e) => setTitle(e.target.value)}
+                  />
+                  <input
+                      type="number"
+                      placeholder="Nombre de maps"
+                      onChange={(e) => setSize(e.target.value)}
+                  />
+                </div>
+
+                <div className="description-toggle-row">
+                  <input
+                      type="text"
+                      placeholder="Description"
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      disabled={isToggleActive}
+                      className={isToggleActive ? "disabled-input" : ""}
+                  />
+                  <button onClick={handleToggle} className="toggle-btn">
+                    {isToggleActive ? "Désactiver" : "Activer"} génération auto
+                  </button>
+                </div>
+              </div>
+
+              {/* Modes */}
+              <div className="form-section">
+                <h3>🎮 Modes de jeu</h3>
+                <CheckboxModes setIsCheck={setModes} isCheck={modes} />
+              </div>
+
+              {/* Difficulté */}
+              <div className="form-section">
+                <h3>💀 Difficulté</h3>
+                <RangeSliderDiffilculty
+                    min={minDifficulty}
+                    max={maxDifficulty}
+                    setMin={setMinDifficulty}
+                    setMax={setMaxDifficulty}
+                />
+              </div>
+
+              {/* Status */}
+              <div className="form-section">
+                <h3>📦 Catégories</h3>
+                <CheckboxCategories setIsCheck={setStatus} isCheck={status} />
+              </div>
+
+              {/* Genres */}
+              <div className="form-section">
+                <h3>🎧 Genres musicaux</h3>
+                <CheckboxGenres setIsCheck={setGenres} isCheck={genres} />
+              </div>
+
+              {/* Langues */}
+              <div className="form-section">
+                <h3>🌍 Langues</h3>
+                <CheckboxLanguages setIsCheck={setLanguages} isCheck={languages} />
+              </div>
+
+              <button type="submit" onClick={handleGenerate}>
+                🎼 Générer la playlist
               </button>
-            </div>
-            <CheckboxModes setIsCheck={setModes} isCheck={modes} />
-            <RangeSliderDiffilculty
-              min={minDifficulty}
-              max={maxDifficulty}
-              setMin={setMinDifficulty}
-              setMax={setMaxDifficulty}
-            />
-            <CheckboxCategories setIsCheck={setStatus} isCheck={status} />
-            <CheckboxGenres setIsCheck={setGenres} isCheck={genres} />
-            <CheckboxLanguages setIsCheck={setLanguages} isCheck={languages} />
-            <button type="submit" onClick={handleGenerate}
-            >
-              Générer
-            </button>
-            {error && (
-              <p style={{ color: "red" }}>
-                {error.message} {error.detail}
-              </p>
-            )}
-          </form>
+
+              {error && (
+                  <p style={{ color: "red", marginTop: "10px" }}>
+                    {error.message} {error.detail}
+                  </p>
+              )}
+            </form>
+
         )}
       </div>
       {isModalOpen && (

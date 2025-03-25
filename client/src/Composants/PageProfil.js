@@ -160,7 +160,7 @@ export default function PageProfil(props) {
   };
 
   return (
-    <div className="profil">
+    <div className="profil-page">
       <div className="headerProfil" style={{ minHeight: '81.2vh' }}>
         <div className="entete">
           <img src={entete} />
@@ -221,25 +221,24 @@ export default function PageProfil(props) {
           )}
         </div>
       </div>
+        <div className="contentProfil">
+            <div className={`liste-amis ${!afficherAmis ? 'hidden' : ''}`}>
+                <h2>Amis</h2>
+                <ListeProfils profils={amis} setCurrentPage={props.setCurrentPage} />
+            </div>
 
-      {afficherAmis && (
-        <div className="liste-amis">
-          <h2>Amis</h2>
-          <ListeProfils profils={amis} setCurrentPage={props.setCurrentPage} />
+            <div className="liste-playlists">
+                <h2>Playlists :</h2>
+                <ListePlaylists
+                    userProfil={props.userProfil}
+                    myLogin={props.myLogin}
+                    setCurrentPage={props.setCurrentPage}
+                    playlists={playlists}
+                    setPlaylists={setPlaylists}
+                    myPage={true}
+                />
+            </div>
         </div>
-      )}
-
-      <div className="liste-playlists">
-        <h2>Playlists :</h2>
-        <ListePlaylists
-          userProfil={props.userProfil}
-          myLogin={props.myLogin}
-          setCurrentPage={props.setCurrentPage}
-          playlists={playlists}
-          setPlaylists={setPlaylists}
-          myPage={true}
-        />
-      </div>
     </div>
   );
 }

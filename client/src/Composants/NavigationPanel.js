@@ -1,7 +1,7 @@
 import { Nav, Navbar } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import ListePlaylistIcon from "../Images/music-note-list.svg";
-
+import '../CSS/header.css'
 import { faHome, faPowerOff, faUser } from "@fortawesome/free-solid-svg-icons";
 
 export default function NavigationPanel(props) {

@@ -12,6 +12,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import SaisieMessage from './SaisieMessage';
 import ListeMessages from './ListeMessages';
+import '../CSS/playlist.css'
 
 export default function Playlist(props) {
   const [playlist, setPlaylist] = useState(props.playlist);
@@ -226,29 +227,20 @@ export default function Playlist(props) {
   }
 
   return (
-    <div style={{width: '100%'}}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <h3
-          onClick={toggleDetails}
-          style={{ cursor: 'pointer', textDecoration: 'underline' }}
-        >
+    <div className="playlist-item">
+      <div className="playlist-header">
+        <h3 className="playlist-title" onClick={toggleDetails}>
           {title || 'Sans Titre'}
         </h3>
         {props.myPage && (
-          <>
-            <button
-            onClick={() => props.handleDelete(props.playlistId)}
-            style={{ marginLeft: '10px' }}
-            >
+          <div className="playlist-buttons">
+            <button onClick={() => props.handleDelete(props.playlistId)}>
               Supprimer
             </button>
-            <button
-            onClick={() => handleSetEdit()}
-            style={{ marginLeft: '10px' }}
-            >
+            <button onClick={() => handleSetEdit()}>
               Editer
             </button>
-          </>
+          </div>
         )}
         {editPlaylist && (
           <div>

@@ -30,28 +30,31 @@ export default function CheckboxLanguages(props) {
       props.setIsCheck(props.isCheck.filter((item) => item !== name));
     }
   };
+
   return (
-    <div className="row-osu-form">
-      <input
-        type="checkbox"
-        id="touslangues"
-        name="touslangues"
-        checked={isCheckAll}
-        onChange={handleSelectAll}
-      />
-      <label htmlFor="touslangues">tous</label>
-      {list.map(({ id, name }) => (
-        <React.Fragment key={id}>
+      <div className="checkbox-group languages">
+        <label className="checkbox-item">
           <input
-            id={id}
-            type="checkbox"
-            name={name}
-            onChange={handleClick}
-            checked={props.isCheck.includes(name)}
+              type="checkbox"
+              id="touslangues"
+              name="touslangues"
+              checked={isCheckAll}
+              onChange={handleSelectAll}
           />
-          <label htmlFor={id}>{name}</label>
-        </React.Fragment>
-      ))}
-    </div>
+          tous
+        </label>
+        {list.map(({ id, name }) => (
+            <label className="checkbox-item" key={id}>
+              <input
+                  id={id}
+                  type="checkbox"
+                  name={name}
+                  onChange={handleClick}
+                  checked={props.isCheck.includes(name)}
+              />
+              {name}
+            </label>
+        ))}
+      </div>
   );
 }

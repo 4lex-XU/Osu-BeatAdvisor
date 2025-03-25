@@ -1,0 +1,104 @@
+.auth-container {
+    max-width: 600px; /* Augmenté pour permettre 2 colonnes */
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    font-family: "Segoe UI", sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+
+.auth-container h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.auth-container label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 600;
+    color: #555;
+}
+
+.auth-container input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+
+    background: rgba(255, 255, 255, 0.1); /* fond transparent */
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+
+    color: #fff; /* texte blanc pour lisibilité */
+    transition: 0.3s;
+}
+
+.auth-container input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.auth-container input:focus {
+    border-color: #0099ff;
+    box-shadow: 0 0 5px rgba(0, 153, 255, 0.3);
+    outline: none;
+}
+
+.auth-container input:focus {
+    border-color: #0099ff;
+    box-shadow: 0 0 5px rgba(0, 153, 255, 0.2);
+    outline: none;
+}
+
+.auth-container .btn {
+    margin-top: 20px;
+    width: 30%;
+    background: #0099ff;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.auth-container .btn:hover {
+    background: #007acc;
+}
+
+.auth-container .link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #007acc;
+    text-decoration: none;
+}
+
+.auth-container .link:hover {
+    text-decoration: underline;
+}
+
+.auth-container .error {
+    color: red;
+    margin-top: 10px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.form-grid {
+    display: flex;
+    gap: 90px;
+}
+
+.form-column {
+    flex: 1;
+}

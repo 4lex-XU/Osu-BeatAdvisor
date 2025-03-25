@@ -1,51 +1,36 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
-function BackgroundAudio({ sources }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [playStarted, setPlayStarted] = useState(false); // État pour gérer si la lecture a commencé
+function BackgroundAudio({ sources, isPlaying }) {
   const audioRef = useRef(null);
+  const currentIndexRef = useRef(0);
 
   useEffect(() => {
-    if (playStarted && audioRef.current) {
-      audioRef.current
-        .play()
-        .catch((error) => console.error("Error playing audio:", error));
-      const handleEnded = () => {
-        setCurrentIndex((prevIndex) => (prevIndex + 1) % sources.length);
-      };
+    const audio = audioRef.current;
+    if (!audio) return;
 
-      audioRef.current.addEventListener("ended", handleEnded);
+    const handleEnded = () => {
+      currentIndexRef.current =
+          (currentIndexRef.current + 1) % sources.length;
+      audio.src = sources[currentIndexRef.current];
+      audio.play().catch(console.error);
+    };
 
-      return () => audioRef.current.removeEventListener("ended", handleEnded);
+    audio.addEventListener("ended", handleEnded);
+    return () => {
+      audio.removeEventListener("ended", handleEnded);
+    };
+  }, [sources]);
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (isPlaying && audio) {
+      audio.src = sources[currentIndexRef.current];
+      audio.play().catch(console.error);
     }
-  }, [currentIndex, playStarted, sources]);
-
-  const startPlayback = () => {
-    setPlayStarted(true);
-  };
+  }, [isPlaying, sources]);
 
   return (
-    <div style={{ position: "absolute", left: "-9999px" }}>
-      <audio
-        ref={audioRef}
-        src={sources[currentIndex]}
-        loop={sources.length === 1}
-      />
-      {!playStarted && (
-        <div className="modal-music">
-          <div className="modal-content-music">
-            <h4>Bienvenue sur BeatAdvisor!</h4>
-            <p>
-              Ici, vous pourrez générer de nombreuses playlists pour vos
-              sessions sur Osu!
-            </p>
-            <button onClick={startPlayback}>
-              Autoriser la musique de fond{" "}
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+      <audio ref={audioRef} loop={sources.length === 1} />
   );
 }
 

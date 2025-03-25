@@ -1,0 +1,61 @@
+.playlist-details {
+    background: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin: 15px 0;
+    color: #fff;
+    font-size: 15px;
+    line-height: 1.6;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+.playlist-details p {
+    margin: 8px 0;
+}
+
+.playlist-details a {
+    color: #80ccff;
+    text-decoration: none;
+}
+
+.playlist-details a:hover {
+    text-decoration: underline;
+}
+
+.beatmap-item {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 8px;
+    padding: 10px 15px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(255,255,255,0.08);
+}
+
+.beatmap-item h3 {
+    font-size: 16px;
+    margin: 0 0 5px;
+    color: #fff;
+}
+
+.beatmap-item p {
+    margin: 3px 0;
+    font-size: 14px;
+    color: #ddd;
+}
+
+.beatmap-item button {
+    margin-top: 6px;
+    background: rgba(255, 77, 77, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.beatmap-item button:hover {
+    background: rgba(255, 77, 77, 0.4);
+}

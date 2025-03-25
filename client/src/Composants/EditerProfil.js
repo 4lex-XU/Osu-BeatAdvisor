@@ -1,5 +1,7 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
+
+import '../CSS/editer-profil.css'
 
 export default function EditerProfil(props) {
   const [newLogin, setNewLogin] = useState("");
@@ -95,71 +97,41 @@ export default function EditerProfil(props) {
   };
 
   return (
-    <div className="EditerProfil">
-      <form onSubmit={Edit}>
-        <label htmlFor="newLogin">Pseudo</label>
-        <input
-          type="text"
-          id="newLogin"
-          className="newLogin"
-          onChange={getNewLogin}
-          placeholder={login}
-        />
-        <label htmlFor="newDesciption">Bio</label>
-        <textarea
-          style={{ resize: "none", with: "100%" }}
-          type="text"
-          id="newDesciption"
-          className="newDesciption"
-          onChange={getDescription}
-          placeholder={description}
-        />
-        <label htmlFor="newCountry">Country</label>
-        <input
-          type="text"
-          id="newCountry"
-          className="newCountry"
-          onChange={getVille}
-          placeholder={ville}
-        />
-        <label htmlFor="newDateBirth">Date Birth</label>
-        <input
-          type="text"
-          id="newDateBirth"
-          className="newDateBirth"
-          onChange={getNaissance}
-          placeholder={naissance}
-        />
-        <label htmlFor="newPassword">Password</label>
-        <input
-          type="password"
-          id="newPassword"
-          className="newPassword"
-          onChange={getNewPassword}
-          placeholder={"......"}
-        />
-        <label htmlFor="newPasswordConfirm">Confirm password</label>
-        <input
-          type="password"
-          id="newPasswordConfirm"
-          className="newPasswordConfirm"
-          onChange={getNewPasswordConfirm}
-          placeholder={"......"}
-        />
+      <div className="EditerProfil">
+        <form onSubmit={Edit}>
+          <div className="form-columns">
+            {/* Colonne Gauche */}
+            <div className="form-left">
+              <label htmlFor="newLogin">Pseudo</label>
+              <input type="text" id="newLogin" onChange={getNewLogin} placeholder={login} />
 
-        <button type="submit">Valider</button>
-        {!PassOk && (
-          <p style={{ color: "red" }}>Les mots de passe ne correspondent pas</p>
-        )}
-        {error && (
-          <p style={{ color: "red" }}>
-            {error.message} {error.detail}
-          </p>
-        )}
-        <a className="pageProfil" href="a" onClick={pageProfilHandler}>
-          Retour
-        </a>
-      </form>
-    </div>
+              <label htmlFor="newDesciption">Bio</label>
+              <textarea id="newDesciption" onChange={getDescription} placeholder={description} />
+
+              <label htmlFor="newCountry">Ville</label>
+              <input type="text" id="newCountry" onChange={getVille} placeholder={ville} />
+
+              <label htmlFor="newDateBirth">Date de naissance</label>
+              <input type="date" id="newDateBirth" onChange={getNaissance} placeholder={naissance} />
+            </div>
+
+            {/* Colonne Droite */}
+            <div className="form-right">
+              <label htmlFor="newPassword">Mot de passe</label>
+              <input type="password" id="newPassword" onChange={getNewPassword} placeholder="******" />
+
+              <label htmlFor="newPasswordConfirm">Confirmation</label>
+              <input type="password" id="newPasswordConfirm" onChange={getNewPasswordConfirm} placeholder="******" />
+
+              <button type="submit">Valider</button>
+
+              {!PassOk && <p style={{ color: "red" }}>Les mots de passe ne correspondent pas</p>}
+              {error && <p style={{ color: "red" }}>{error.message} {error.detail}</p>}
+              <a className="pageProfil" href="a" onClick={pageProfilHandler}>Retour</a>
+            </div>
+          </div>
+        </form>
+      </div>
   );
+
 }

@@ -25,27 +25,30 @@ export default function CheckboxModes(props) {
     }
   };
   return (
-    <div className="row-osu-form">
-      <input
-        type="checkbox"
-        id="tousmode"
-        name="tousmode"
-        checked={isCheckAll}
-        onChange={handleSelectAll}
-      />
-      <label htmlFor="tousmode">tous</label>
-      {list.map(({ id, name }) => (
-        <React.Fragment key={id}>
+      <div className="checkbox-group modes">
+        <label className="checkbox-item modes-item">
           <input
-            id={id}
-            type="checkbox"
-            name={name}
-            onChange={handleClick}
-            checked={props.isCheck.includes(name)}
+              type="checkbox"
+              id="tousmode"
+              name="tousmode"
+              checked={isCheckAll}
+              onChange={handleSelectAll}
           />
-          <label htmlFor={id}>{name}</label>
-        </React.Fragment>
-      ))}
-    </div>
+          tous
+        </label>
+        {list.map(({ id, name }) => (
+            <label className="checkbox-item modes-item" key={id}>
+              <input
+                  id={id}
+                  type="checkbox"
+                  name={name}
+                  onChange={handleClick}
+                  checked={props.isCheck.includes(name)}
+              />
+              {name}
+            </label>
+        ))}
+      </div>
   );
+
 }
